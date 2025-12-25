@@ -2,6 +2,7 @@ import { lazy, Suspense, type ReactNode } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Layout from '../components/Layout'
 import { useAppSelector } from '../redux/hooks'
+import type { Role } from "../types/auth"
 
 const Home = lazy(() => import('../pages/Home'))
 const Login = lazy(() => import('../pages/Login'))
@@ -10,7 +11,7 @@ const AdminDashboard = lazy(() => import('../pages/AdminDashboard'))
 
 type RequireAuthTypes = {
   children: ReactNode
-  roles?: string[]
+  roles?: Role[]
 }
 
 const RequireAuth = ({ children, roles }: RequireAuthTypes) => {
