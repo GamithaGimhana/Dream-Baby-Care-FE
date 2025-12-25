@@ -1,7 +1,13 @@
-import { useAppSelector } from "../redux/hooks"
+import { useState } from "react"
+import { useAppDispatch, useAppSelector } from "../redux/hooks"
+import { addProduct, updateProduct } from "../redux/slices/productSlice"
+import ProductForm from "../components/ProductForm"
+import type { Product } from "../types/product"
+
 
 export default function AdminDashboard() {
   const products = useAppSelector((state) => state.products.items)
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -14,6 +20,24 @@ export default function AdminDashboard() {
           <p>No products available.</p>
         ) : (
           <div className="overflow-x-auto">
+            <section className="mt-8">
+              <h2 className="text-xl font-semibold mb-4">
+                {editingProduct ? "Edit Product" : "Add Product"}
+              </h2>
+
+              <ProductForm
+                initialData={editingProduct ?? undefined}
+                onSubmit={(product) => {
+                  if (editingProduct) {
+                    // dispatch(updateProduct(product))
+                    setEditingProduct(null)
+                  } else {
+                    // dispatch(addProduct(product))
+                  }
+                }}
+              />
+            </section>
+
             <table className="w-full border border-gray-200">
               <thead className="bg-gray-100">
                 <tr>
@@ -33,7 +57,12 @@ export default function AdminDashboard() {
                     <td className="p-3">Rs. {product.price}</td>
                     <td className="p-3">{product.stock}</td>
                     <td className="p-3 flex gap-3">
-                      <button className="text-blue-600">Edit</button>
+                      <button
+                        className="text-blue-600"
+                        onClick={() => setEditingProduct(product)}
+                      >
+                        Edit
+                      </button>
                       <button className="text-red-600">Delete</button>
                     </td>
                   </tr>
