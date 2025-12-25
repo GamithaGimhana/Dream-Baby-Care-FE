@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import { logout } from "../redux/slices/authSlice"
 
@@ -18,6 +18,9 @@ export default function Header() {
         <button onClick={handleLogout}>
           Logout
         </button>
+      )}
+      {user?.roles.includes("ADMIN") && (
+        <Link to="/admin">Admin</Link>
       )}
     </header>
   )
