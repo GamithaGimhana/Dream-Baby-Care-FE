@@ -1,3 +1,5 @@
+import { useAppDispatch } from "../redux/hooks"
+import { addToCart } from "../redux/slices/cartSlice"
 import type { Product } from "../types/product"
 
 type Props = {
@@ -5,6 +7,7 @@ type Props = {
 }
 
 export default function ProductCard({ product }: Props) {
+    const dispatch = useAppDispatch()
   return (
     <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition p-4">
       <img
@@ -26,6 +29,7 @@ export default function ProductCard({ product }: Props) {
 
           <button
             disabled={product.stock === 0}
+            onClick={() => dispatch(addToCart(product))}
             className="bg-blue-600 text-white px-4 py-1 rounded-lg disabled:bg-gray-400"
           >
             Add to Cart

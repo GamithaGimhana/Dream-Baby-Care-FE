@@ -8,6 +8,7 @@ const Home = lazy(() => import('../pages/Home'))
 const Login = lazy(() => import('../pages/Login'))
 const Register = lazy(() => import('../pages/Register'))
 const AdminDashboard = lazy(() => import('../pages/AdminDashboard'))
+const Cart = lazy(() => import("../pages/Cart"))
 
 type RequireAuthTypes = {
   children: ReactNode
@@ -54,6 +55,14 @@ export default function Router() {
               element={
                 <RequireAuth roles={['ADMIN']}>
                   <AdminDashboard />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/cart"
+              element={
+                <RequireAuth>
+                  <Cart />
                 </RequireAuth>
               }
             />

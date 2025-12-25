@@ -1,12 +1,6 @@
-// src/redux/slices/cartSlice.ts
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
-
-type CartItem = {
-  productId: string
-  name: string
-  price: number
-  quantity: number
-}
+import type { CartItem } from "../../types/cart"
+import type { Product } from "../../types/product"
 
 type CartState = {
   items: CartItem[]
@@ -20,21 +14,27 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<CartItem>) => {
-      const item = state.items.find(
-        (i) => i.productId === action.payload.productId
+    addToCart: (state, action: PayloadAction<Product>) => {
+      const existingItem = state.items.find(
+        (item) => item.product.id === action.payload.id
       )
-      if (item) {
-        item.quantity += action.payload.quantity
+
+      if (existingItem) {
+        existingItem.quantity += 1
       } else {
-        state.items.push(action.payload)
+        state.items.push({
+          product: action.payload,
+          quantity: 1,
+        })
       }
     },
+
     removeFromCart: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter(
-        (item) => item.productId !== action.payload
+        (item) => item.product.id !== action.payload
       )
     },
+
     clearCart: (state) => {
       state.items = []
     },
