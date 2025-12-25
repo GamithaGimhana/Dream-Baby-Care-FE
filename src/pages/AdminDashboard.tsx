@@ -1,13 +1,15 @@
 import { useState } from "react"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
-import { addProduct, updateProduct } from "../redux/slices/productSlice"
+import { addProduct, updateProduct, deleteProduct } from "../redux/slices/productSlice"
 import ProductForm from "../components/ProductForm"
+import ConfirmModal from "../components/ConfirmModal"
 import type { Product } from "../types/product"
 
 
 export default function AdminDashboard() {
   const products = useAppSelector((state) => state.products.items)
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
+  const [deleteId, setDeleteId] = useState<string | null>(null)
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -20,24 +22,6 @@ export default function AdminDashboard() {
           <p>No products available.</p>
         ) : (
           <div className="overflow-x-auto">
-            <section className="mt-8">
-              <h2 className="text-xl font-semibold mb-4">
-                {editingProduct ? "Edit Product" : "Add Product"}
-              </h2>
-
-              <ProductForm
-                initialData={editingProduct ?? undefined}
-                onSubmit={(product) => {
-                  if (editingProduct) {
-                    // dispatch(updateProduct(product))
-                    setEditingProduct(null)
-                  } else {
-                    // dispatch(addProduct(product))
-                  }
-                }}
-              />
-            </section>
-
             <table className="w-full border border-gray-200">
               <thead className="bg-gray-100">
                 <tr>
@@ -63,12 +47,45 @@ export default function AdminDashboard() {
                       >
                         Edit
                       </button>
-                      <button className="text-red-600">Delete</button>
+                      <button
+                        className="text-red-600"
+                        onClick={() => setDeleteId(product.id)}
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+            <section className="mt-8">
+              <h2 className="text-xl font-semibold mb-4">
+                {editingProduct ? "Edit Product" : "Add Product"}
+              </h2>
+
+              <ProductForm
+                initialData={editingProduct ?? undefined}
+                onSubmit={(product) => {
+                  if (editingProduct) {
+                    // dispatch(updateProduct(product))
+                    setEditingProduct(null)
+                  } else {
+                    // dispatch(addProduct(product))
+                  }
+                }}
+              />
+            </section>
+            {deleteId && (
+              <ConfirmModal
+                title="Delete Product"
+                message="Are you sure you want to delete this product? This action cannot be undone."
+                onCancel={() => setDeleteId(null)}
+                onConfirm={() => {
+                  // dispatch(deleteProduct(deleteId))
+                  setDeleteId(null)
+                }}
+              />
+            )}
           </div>
         )}
       </section>
