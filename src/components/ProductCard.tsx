@@ -10,6 +10,15 @@ type Props = {
 export default function ProductCard({ product }: Props) {
   const dispatch = useAppDispatch()
 
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart({
+        product,
+        quantity: 1,
+      })
+    )
+  }
+
   return (
     <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition p-4">
       
@@ -41,17 +50,10 @@ export default function ProductCard({ product }: Props) {
 
           <button
             disabled={product.stock === 0}
-            onClick={() =>
-              dispatch(
-                addToCart({
-                  product,
-                  quantity: 1,
-                })
-              )
-            }
-            className="bg-blue-600 text-white px-4 py-1 rounded-lg disabled:bg-gray-400"
+            onClick={handleAddToCart}
+            className="bg-blue-600 text-white px-4 py-1 rounded-lg disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
-            Add to Cart
+            {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
           </button>
         </div>
       </div>
