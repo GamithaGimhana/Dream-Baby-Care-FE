@@ -69,7 +69,11 @@ export default function Router() {
             />
             <Route
               path="/products/:id"
-              element={<ProductDetails />}
+              element={
+                <RequireAuth>
+                  <ProductDetails />
+                </RequireAuth>
+              }
             />
           </Route>
         </Routes>
